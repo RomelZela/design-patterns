@@ -14,6 +14,7 @@ public class CommandParser {
             throw new BadCommandException();
         }
     }
+    
 
     private boolean isValidCommand(String commandLine) {
         final String regex = "a \\\"([a-zA-ZÀ-ÿ\\u00f1\\u00d1]|[.,\\s\\/#!$%\\^&\\*;:{}=\\-_`~()”“\"…]|\\s])*\\\"|d ([0-9])*|u ([0-9])* \\\"([[a-zA-ZÀ-ÿ\\u00f1\\u00d1]|[.,\\s\\/#!$%\\^&\\*;:{}=\\-_`~()”“\"…]|\\s])*\\\"|undo|exit";
@@ -43,6 +44,8 @@ public class CommandParser {
             return new String[]{"u", arg2, arg3};
         }
         return new String[]{commandLine};
+        
+        
     }
     
 }

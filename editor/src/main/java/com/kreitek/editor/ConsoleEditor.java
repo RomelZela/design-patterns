@@ -1,6 +1,6 @@
 package com.kreitek.editor;
 
-import com.kreitek.editor.commands.CommandFactory;
+import com.kreitek.editor.commands.*;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -18,6 +18,32 @@ public class ConsoleEditor implements Editor {
 
     private final CommandFactory commandFactory = new CommandFactory();
     private ArrayList<String> documentLines = new ArrayList<String>();
+    private ArrayList<Object> state = new ArrayList<>();
+
+    
+    
+    
+    public void setState(ArrayList<String> documentLines) {
+    	this.documentLines=documentLines;
+    }
+
+    
+    public Memento getState() {
+    	
+		
+		state.add(documentLines);
+    	return new Memento(state);
+    }
+    
+    public void restoreFromMemento(Memento memento) {
+    	if(memento !=null) {
+    		state = memento.getState();
+    		
+    	}
+    
+    	else { System.out.println("error");
+    	}
+    }
 
     @Override
     public void run() {
@@ -27,6 +53,7 @@ public class ConsoleEditor implements Editor {
             try {
                 Command command = commandFactory.getCommand(commandLine);
                 command.execute(documentLines);
+          
             } catch (BadCommandException e) {
                 printErrorToConsole("Bad command");
             } catch (ExitException e) {
@@ -36,6 +63,8 @@ public class ConsoleEditor implements Editor {
             showHelp();
         }
     }
+    
+      
 
     private void showDocumentLines(ArrayList<String> textLines) {
         if (textLines.size() > 0){
@@ -64,6 +93,7 @@ public class ConsoleEditor implements Editor {
         printLnToConsole("To add new line -> a \"your text\"");
         printLnToConsole("To update line  -> u [line number] \"your text\"");
         printLnToConsole("To delete line  -> d [line number]");
+        printLnToConsole("To restore line -> undo");
     }
 
     private void printErrorToConsole(String message) {
